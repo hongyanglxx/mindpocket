@@ -34,7 +34,8 @@ MindPocket organizes your bookmarks with AI-powered RAG content summarization an
 2. **One-Click Deploy**: Set up your personal bookmark system in minutes
 3. **Multi-Platform**: Web + Mobile + Browser Extension
 4. **AI Enhanced**: RAG and AI Agent for smart tagging and summarization
-5. **Open Source**: Fully open source, your data belongs to you
+5. **CLI Ready**: Official CLI makes it easy to integrate with external agents like OpenClaw
+6. **Open Source**: Fully open source, your data belongs to you
 
 ## 🎨 VIBE CODING
 
@@ -175,6 +176,9 @@ pnpm add -g mindpocket
 ### Quick Start
 
 ```bash
+mindpocket version
+mindpocket schema
+mindpocket doctor
 mindpocket --help
 mindpocket config set server https://your-domain.com
 mindpocket auth login
@@ -182,51 +186,14 @@ mindpocket user me
 mindpocket bookmarks list
 ```
 
-### Upgrade
+Recommended agent flow:
 
 ```bash
-npm install -g mindpocket@latest
+mindpocket version
+mindpocket schema
+mindpocket doctor
+mindpocket auth login --no-open
 ```
-
-### Uninstall
-
-```bash
-npm uninstall -g mindpocket
-```
-
-### Help for AI Agents
-
-Each command includes structured `--help` output so an AI agent can inspect:
-
-- what the command does
-- required arguments and options
-- whether login is required
-- output JSON fields
-- examples
-- common error codes
-
-Examples:
-
-```bash
-mindpocket --help
-mindpocket auth --help
-mindpocket bookmarks create --help
-```
-
-### CLI Release
-
-The npm package is published automatically from GitHub Actions when a tag matching `cli-vX.Y.Z` is pushed.
-
-Examples:
-
-```bash
-git tag cli-v1.0.0
-git push origin cli-v1.0.0
-```
-
-GitHub repository secrets must include:
-
-- `NPM_TOKEN`
 
 ## 🛠 Tech Stack
 
