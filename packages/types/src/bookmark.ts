@@ -24,7 +24,7 @@ export type SourceType = (typeof SOURCE_TYPES)[number]
 /**
  * Client source for bookmarks
  */
-export const CLIENT_SOURCES = ["web", "mobile", "extension"] as const
+export const CLIENT_SOURCES = ["web", "mobile", "extension", "cli"] as const
 export type ClientSource = (typeof CLIENT_SOURCES)[number]
 
 /**

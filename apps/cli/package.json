@@ -1,0 +1,48 @@
+{
+  "name": "mindpocket",
+  "version": "0.0.1",
+  "description": "MindPocket CLI for agents and scripts",
+  "type": "module",
+  "bin": {
+    "mindpocket": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jihe520/mindpocket.git",
+    "directory": "apps/cli"
+  },
+  "homepage": "https://github.com/jihe520/mindpocket#readme",
+  "bugs": {
+    "url": "https://github.com/jihe520/mindpocket/issues"
+  },
+  "keywords": [
+    "mindpocket",
+    "cli",
+    "agent",
+    "ai",
+    "bookmarks"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/bin.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "pnpm build"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.10.6",
+    "tsx": "^4.21.0",
+    "typescript": "5.5.4"
+  }
+}

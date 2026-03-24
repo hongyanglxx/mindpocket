@@ -1,0 +1,66 @@
+name: Publish CLI
+
+on:
+  push:
+    tags:
+      - "cli-v*.*.*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish mindpocket CLI to npm
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.9.0
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
+      - name: Validate release tag
+        run: |
+          TAG_NAME="${GITHUB_REF_NAME}"
+          if [[ ! "$TAG_NAME" =~ ^cli-v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "Invalid CLI tag: $TAG_NAME"
+            exit 1
+          fi
+          echo "CLI_VERSION=${BASH_REMATCH[1]}" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync package version to tag
+        working-directory: apps/cli
+        run: npm pkg set version="${CLI_VERSION}"
+
+      - name: Build CLI
+        run: pnpm --filter mindpocket build
+
+      - name: Verify publish artifact
+        working-directory: apps/cli
+        run: |
+          test -f dist/bin.js
+          npm pack --dry-run
+
+      - name: Publish to npm
+        working-directory: apps/cli
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

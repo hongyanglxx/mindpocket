@@ -4,17 +4,20 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { APIError } from "better-auth/api"
 import { nextCookies } from "better-auth/next-js"
 import { bearer } from "better-auth/plugins/bearer"
+import { deviceAuthorization } from "better-auth/plugins/device-authorization"
 import { count } from "drizzle-orm"
 import { db } from "@/db/client"
 import { user as userTable } from "@/db/schema/auth"
 
+const DEFAULT_APP_URL = "http://127.0.0.1:3000"
+const CLI_CLIENT_ID = "mindpocket-cli"
+
 export const auth = betterAuth({
-  baseURL:
-    process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://127.0.0.1:3000",
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || DEFAULT_APP_URL,
   trustedOrigins: [
-    process.env.NEXT_PUBLIC_APP_URL || "http://127.0.0.1:3000",
+    process.env.NEXT_PUBLIC_APP_URL || DEFAULT_APP_URL,
     "chrome-extension://*",
-    "http://127.0.0.1:3000",
+    DEFAULT_APP_URL,
     "http://127.0.0.1:8081",
     "http://localhost:8081",
     "mindpocket://",
@@ -55,5 +58,17 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [nextCookies(), bearer(), expo()],
+  plugins: [
+    nextCookies(),
+    bearer(),
+    expo(),
+    deviceAuthorization({
+      expiresIn: "15m",
+      interval: "5s",
+      verificationUri: "/device",
+      validateClient(clientId) {
+        return clientId === CLI_CLIENT_ID
+      },
+    }),
+  ],
 })

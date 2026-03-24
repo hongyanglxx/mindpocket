@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm"
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { bookmark } from "./bookmark"
 import { folder } from "./folder"
 import { tag } from "./tag"
@@ -76,6 +76,28 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)]
 )
 
+export const deviceCode = pgTable(
+  "device_code",
+  {
+    id: text("id").primaryKey(),
+    deviceCode: text("device_code").notNull().unique(),
+    userCode: text("user_code").notNull().unique(),
+    userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expires_at").notNull(),
+    status: text("status").notNull(),
+    lastPolledAt: timestamp("last_polled_at"),
+    pollingInterval: integer("polling_interval"),
+    clientId: text("client_id"),
+    scope: text("scope"),
+  },
+  (table) => [
+    index("device_code_user_code_idx").on(table.userCode),
+    index("device_code_user_id_idx").on(table.userId),
+    index("device_code_status_idx").on(table.status),
+    index("device_code_expires_at_idx").on(table.expiresAt),
+  ]
+)
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -94,6 +116,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}))
+
+export const deviceCodeRelations = relations(deviceCode, ({ one }) => ({
+  user: one(user, {
+    fields: [deviceCode.userId],
     references: [user.id],
   }),
 }))

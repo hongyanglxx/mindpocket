@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { AuthBrandDisplay } from "@/components/auth-brand-display"
@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils"
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
   const t = useT()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -24,6 +25,10 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const [checkingRegistration, setCheckingRegistration] = useState(true)
   const [registrationAllowed, setRegistrationAllowed] = useState(true)
   const [registrationMessage, setRegistrationMessage] = useState<string | null>(null)
+  const redirectTarget = searchParams.get("redirect")
+  const registrationCheckFailedMessage = t.auth.registrationCheckFailed
+  const nextPath =
+    redirectTarget?.startsWith("/") && !redirectTarget.startsWith("//") ? redirectTarget : "/"
 
   useEffect(() => {
     // Check if registration is allowed
@@ -35,14 +40,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         setRegistrationMessage(data.message)
       } catch (error) {
         console.error("Failed to check registration status:", error)
-        toast.error(t.auth.registrationCheckFailed)
+        toast.error(registrationCheckFailedMessage)
       } finally {
         setCheckingRegistration(false)
       }
     }
 
     checkRegistration()
-  }, [])
+  }, [registrationCheckFailedMessage])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,7 +69,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         },
         onSuccess: () => {
           toast.success(t.auth.signupSuccess)
-          router.push("/")
+          router.push(nextPath)
         },
       },
     })
@@ -101,7 +106,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   <p className="font-medium">{registrationMessage}</p>
                   <Link
                     className="mt-2 inline-block text-sm underline underline-offset-4 hover:text-destructive/80"
-                    href="/login"
+                    href={`/login${nextPath === "/" ? "" : `?redirect=${encodeURIComponent(nextPath)}`}`}
                   >
                     {t.auth.backToLogin}
                   </Link>

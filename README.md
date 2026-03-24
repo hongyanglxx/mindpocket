@@ -138,6 +138,8 @@ If `pnpm db:bootstrap` fails, check these first:
 # Root
 pnpm dev          # Start all apps
 pnpm build        # Build all apps
+pnpm cli:build    # Build the CLI package
+pnpm cli:pack     # Preview the npm package contents for the CLI
 pnpm format       # Format code
 pnpm check        # Code check
 
@@ -153,6 +155,78 @@ pnpm dev          # Start Expo
 pnpm android      # Run on Android
 pnpm ios          # Run on iOS
 ```
+
+## CLI
+
+MindPocket CLI is the official command line client for agents, scripts, and developers who want to interact with a MindPocket server from the terminal.
+
+### Install
+
+```bash
+npm install -g mindpocket
+```
+
+Or with pnpm:
+
+```bash
+pnpm add -g mindpocket
+```
+
+### Quick Start
+
+```bash
+mindpocket --help
+mindpocket config set server https://your-domain.com
+mindpocket auth login
+mindpocket user me
+mindpocket bookmarks list
+```
+
+### Upgrade
+
+```bash
+npm install -g mindpocket@latest
+```
+
+### Uninstall
+
+```bash
+npm uninstall -g mindpocket
+```
+
+### Help for AI Agents
+
+Each command includes structured `--help` output so an AI agent can inspect:
+
+- what the command does
+- required arguments and options
+- whether login is required
+- output JSON fields
+- examples
+- common error codes
+
+Examples:
+
+```bash
+mindpocket --help
+mindpocket auth --help
+mindpocket bookmarks create --help
+```
+
+### CLI Release
+
+The npm package is published automatically from GitHub Actions when a tag matching `cli-vX.Y.Z` is pushed.
+
+Examples:
+
+```bash
+git tag cli-v1.0.0
+git push origin cli-v1.0.0
+```
+
+GitHub repository secrets must include:
+
+- `NPM_TOKEN`
 
 ## 🛠 Tech Stack
 

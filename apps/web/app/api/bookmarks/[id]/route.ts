@@ -1,15 +1,18 @@
 import { and, eq } from "drizzle-orm"
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
 import { db } from "@/db/client"
 import { getBookmarkById, getBookmarkTags } from "@/db/queries/bookmark"
 import { bookmark } from "@/db/schema/bookmark"
 import { folder } from "@/db/schema/folder"
-import { auth } from "@/lib/auth"
+import { requireApiSession } from "@/lib/api-auth"
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const { id } = await params
   const item = await getBookmarkById({ id, userId })
@@ -23,8 +26,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const { id } = await params
   const existing = await getBookmarkById({ id, userId })
@@ -75,8 +82,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const { id } = await params
   const existing = await getBookmarkById({ id, userId })

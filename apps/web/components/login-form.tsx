@@ -1,7 +1,7 @@
 "use client"
 
 import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { AuthBrandDisplay } from "@/components/auth-brand-display"
@@ -16,9 +16,14 @@ import { cn } from "@/lib/utils"
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const t = useT()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+
+  const redirectTarget = searchParams.get("redirect")
+  const nextPath =
+    redirectTarget?.startsWith("/") && !redirectTarget.startsWith("//") ? redirectTarget : "/"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,7 +38,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
         },
         onSuccess: () => {
           toast.success(t.auth.loginSuccess)
-          window.location.href = "/"
+          window.location.href = nextPath
         },
       },
     })
@@ -87,7 +92,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       const res = await fetch("/api/check-registration")
                       const data = await res.json()
                       if (data.allowed) {
-                        router.push("/signup")
+                        router.push(
+                          `/signup${nextPath === "/" ? "" : `?redirect=${encodeURIComponent(nextPath)}`}`
+                        )
                       } else {
                         toast.error(data.message || t.auth.registrationClosed)
                       }

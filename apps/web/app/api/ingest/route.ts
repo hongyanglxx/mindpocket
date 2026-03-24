@@ -1,7 +1,6 @@
 // 数据摄入 API，支持 URL、扩展程序和文件上传三种导入方式
-import { headers } from "next/headers"
 import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
+import { requireApiSession } from "@/lib/api-auth"
 import { resolveFolderForIngest } from "@/lib/ingest/auto-folder"
 import { ingestFromExtension, ingestFromFile, ingestFromUrl } from "@/lib/ingest/pipeline"
 import type { ClientSource } from "@/lib/ingest/types"
@@ -44,8 +43,12 @@ function resolveFolderIdOrAuto(params: {
 }
 
 export async function POST(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const contentType = request.headers.get("content-type") ?? ""
 

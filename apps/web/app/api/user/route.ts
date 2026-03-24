@@ -1,12 +1,17 @@
-import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
+import { requireApiSession } from "@/lib/api-auth"
 
 export async function GET() {
-  const session = await auth.api.getSession({ headers: await headers() })
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const { session } = result
 
   return Response.json({
-    name: session?.user?.name,
-    email: session?.user?.email,
-    avatar: session?.user?.image || "",
+    id: session.user.id,
+    name: session.user.name,
+    email: session.user.email,
+    avatar: session.user.image || "",
   })
 }

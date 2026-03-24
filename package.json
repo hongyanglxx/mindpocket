@@ -3,6 +3,9 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "cli:build": "pnpm --filter mindpocket build",
+    "cli:pack": "cd apps/cli && npm pack --dry-run",
+    "cli:publish:dry-run": "cd apps/cli && npm publish --dry-run",
     "clean": "turbo run clean && rm -rf node_modules",
     "lint": "biome lint .",
     "format": "biome format --write .",

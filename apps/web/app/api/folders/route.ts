@@ -1,14 +1,17 @@
 import { and, eq, inArray, sql } from "drizzle-orm"
 import { nanoid } from "nanoid"
-import { headers } from "next/headers"
 import { db } from "@/db/client"
 import { bookmark } from "@/db/schema/bookmark"
 import { folder } from "@/db/schema/folder"
-import { auth } from "@/lib/auth"
+import { requireApiSession } from "@/lib/api-auth"
 
 export async function GET() {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const folders = await db
     .select({
@@ -39,8 +42,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const body = await request.json()
   const name = typeof body.name === "string" ? body.name.trim() : ""
@@ -80,8 +87,12 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const body = await request.json()
   const orderedIds = Array.isArray(body.orderedIds) ? body.orderedIds : []
@@ -113,8 +124,12 @@ export async function PATCH(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const result = await requireApiSession()
+  if (!result.ok) {
+    return result.response
+  }
+
+  const userId = result.session.user.id
 
   const body = await request.json()
   const id = typeof body.id === "string" ? body.id : ""

@@ -1,12 +1,15 @@
 import { parseSearchMode, parseSearchScope } from "@repo/types"
-import { headers } from "next/headers"
 import { getBookmarksByUserId } from "@/db/queries/bookmark"
 import { searchBookmarks } from "@/db/queries/search"
-import { auth } from "@/lib/auth"
+import { requireApiSession } from "@/lib/api-auth"
 
 export async function GET(request: Request) {
-  const session = await auth.api.getSession({ headers: await headers() })
-  const userId = session!.user!.id
+  const sessionResult = await requireApiSession()
+  if (!sessionResult.ok) {
+    return sessionResult.response
+  }
+
+  const userId = sessionResult.session.user.id
   const { searchParams } = new URL(request.url)
   const type = searchParams.get("type") || undefined
   const platform = searchParams.get("platform") || undefined
@@ -52,7 +55,7 @@ export async function GET(request: Request) {
     })
   }
 
-  const result = await getBookmarksByUserId({
+  const bookmarksResult = await getBookmarksByUserId({
     userId,
     type,
     platform,
@@ -62,5 +65,5 @@ export async function GET(request: Request) {
     offset,
   })
 
-  return Response.json(result)
+  return Response.json(bookmarksResult)
 }
