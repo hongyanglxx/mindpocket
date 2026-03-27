@@ -7,6 +7,10 @@ import { LocaleProvider } from "@/lib/i18n"
 export const metadata: Metadata = {
   title: "MindPocket",
   description: "Your personal knowledge management assistant",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-icon",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

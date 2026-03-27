@@ -102,5 +102,8 @@ pnpm fix           # 使用 Ultracite 修复
 
 以确保代码质量。
 
+做完后使用 chrome dev tool mcp 测试界面是否符合预期
+
+
 ## 参考
 ./docs/PROJECT.md

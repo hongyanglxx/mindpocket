@@ -1,17 +1,57 @@
 "use client"
 
+import { PLATFORM_CONFIG, PlatformIcon, type PlatformKey } from "@repo/icons/web"
 import Link from "next/link"
 import { LogoIcon } from "@/components/logo"
-import Gemini from "@/components/logos/gemini"
-import GooglePaLM from "@/components/logos/google-pa-lm"
-import MagicUI from "@/components/logos/magic-ui"
-import MediaWiki from "@/components/logos/media-wiki"
-import Replit from "@/components/logos/replit"
-import VSCodium from "@/components/logos/vs-codium"
 import { Button } from "@/components/ui/button"
 import { InfiniteSlider } from "@/components/ui/infinite-slider"
 import { useSiteI18n } from "@/lib/site-i18n"
 import { cn } from "@/lib/utils"
+
+const sliderRows = [
+  [
+    { id: "wechat", platform: "wechat" },
+    { id: "xiaohongshu", platform: "xiaohongshu" },
+    { id: "bilibili", platform: "bilibili" },
+    { id: "zhihu", platform: "zhihu" },
+    { id: "juejin", platform: "juejin" },
+    { id: "qq", platform: "qq" },
+    { id: "twitter", platform: "twitter" },
+    { id: "github", platform: "github" },
+    { id: "youtube", platform: "youtube" },
+    { id: "reddit", platform: "reddit" },
+    { id: "medium", platform: "medium" },
+    { id: "notion", platform: "notion" },
+  ],
+  [
+    { id: "github", platform: "github" },
+    { id: "youtube", platform: "youtube" },
+    { id: "wechat", platform: "wechat" },
+    { id: "reddit", platform: "reddit" },
+    { id: "xiaohongshu", platform: "xiaohongshu" },
+    { id: "notion", platform: "notion" },
+    { id: "bilibili", platform: "bilibili" },
+    { id: "twitter", platform: "twitter" },
+    { id: "zhihu", platform: "zhihu" },
+    { id: "medium", platform: "medium" },
+    { id: "juejin", platform: "juejin" },
+    { id: "qq", platform: "qq" },
+  ],
+  [
+    { id: "medium", platform: "medium" },
+    { id: "notion", platform: "notion" },
+    { id: "zhihu", platform: "zhihu" },
+    { id: "github", platform: "github" },
+    { id: "wechat", platform: "wechat" },
+    { id: "youtube", platform: "youtube" },
+    { id: "qq", platform: "qq" },
+    { id: "xiaohongshu", platform: "xiaohongshu" },
+    { id: "reddit", platform: "reddit" },
+    { id: "bilibili", platform: "bilibili" },
+    { id: "twitter", platform: "twitter" },
+    { id: "juejin", platform: "juejin" },
+  ],
+] as const
 
 export default function IntegrationsSection() {
   const { t } = useSiteI18n()
@@ -26,69 +66,30 @@ export default function IntegrationsSection() {
             />
             <div>
               <InfiniteSlider gap={24} speed={20} speedOnHover={10}>
-                <IntegrationCard>
-                  <VSCodium />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MediaWiki />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <GooglePaLM />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <Gemini />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <Replit />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MagicUI />
-                </IntegrationCard>
+                {sliderRows[0].map(({ id, platform }) => (
+                  <IntegrationCard key={`row-1-${id}`}>
+                    <ColoredPlatformIcon platform={platform} />
+                  </IntegrationCard>
+                ))}
               </InfiniteSlider>
             </div>
 
             <div>
               <InfiniteSlider gap={24} reverse speed={20} speedOnHover={10}>
-                <IntegrationCard>
-                  <Gemini />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <Replit />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MediaWiki />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MagicUI />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <VSCodium />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <GooglePaLM />
-                </IntegrationCard>
+                {sliderRows[1].map(({ id, platform }) => (
+                  <IntegrationCard key={`row-2-${id}`}>
+                    <ColoredPlatformIcon platform={platform} />
+                  </IntegrationCard>
+                ))}
               </InfiniteSlider>
             </div>
             <div>
               <InfiniteSlider gap={24} speed={20} speedOnHover={10}>
-                <IntegrationCard>
-                  <Replit />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MagicUI />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <Gemini />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <VSCodium />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <MediaWiki />
-                </IntegrationCard>
-                <IntegrationCard>
-                  <GooglePaLM />
-                </IntegrationCard>
+                {sliderRows[2].map(({ id, platform }) => (
+                  <IntegrationCard key={`row-3-${id}`}>
+                    <ColoredPlatformIcon platform={platform} />
+                  </IntegrationCard>
+                ))}
               </InfiniteSlider>
             </div>
             <div className="absolute inset-0 m-auto flex size-fit justify-center gap-2">
@@ -116,6 +117,16 @@ export default function IntegrationsSection() {
   )
 }
 
+function ColoredPlatformIcon({ platform }: { platform: PlatformKey }) {
+  return (
+    <PlatformIcon
+      className="size-5.5"
+      platform={platform}
+      style={{ color: PLATFORM_CONFIG[platform].colorHex }}
+    />
+  )
+}
+
 const IntegrationCard = ({
   children,
   className,
@@ -134,7 +145,7 @@ const IntegrationCard = ({
 }) => {
   return (
     <div className={cn("bg-background relative z-20 flex size-12 rounded-full border", className)}>
-      <div className={cn("m-auto size-fit *:size-5", isCenter && "*:size-8")}>{children}</div>
+      <div className={cn("m-auto size-fit *:size-5.5", isCenter && "*:size-8")}>{children}</div>
     </div>
   )
 }

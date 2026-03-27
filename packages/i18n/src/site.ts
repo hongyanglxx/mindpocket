@@ -60,19 +60,28 @@ const zh = {
     cta: "开始使用",
   },
   content: {
+    badge: "知识整理 · AI 检索",
     title: "不仅是收藏夹，更是你的个人知识库",
     paragraph1: "MindPocket 会对收藏内容做结构化整理，按文件夹和标签自动归类，降低信息堆积。",
     paragraph2: "结合 AI Agent 与向量检索，你可以直接提问历史收藏内容，快速得到可执行答案。",
     quote: "以前收藏越多越难找，现在是越用越顺手。尤其是自动摘要和标签，真的省下很多整理时间。",
     author: "早期用户反馈",
     authorRole: "独立开发者",
+    panelTitle: "知识面板",
+    panelSubtitle: "让收藏从链接堆积变成可追问、可沉淀、可复用的个人资料库。",
+    highlights: [
+      { title: "自动摘要", detail: "提炼长文重点，保留可回顾的上下文。" },
+      { title: "标签归类", detail: "自动补齐主题线索，降低二次整理成本。" },
+      { title: "语义检索", detail: "按问题查找历史收藏，而不只是记标题。" },
+      { title: "持续沉淀", detail: "把零散输入转成可复用的长期知识资产。" },
+    ],
   },
   stats: {
     title: "MindPocket 关键能力",
     subtitle: "围绕个人长期使用场景设计：免费、可控、可持续扩展。",
     items: [
       { value: "100%", label: "开源可自托管" },
-      { value: "3 端", label: "Web / Mobile / Extension" },
+      { value: "4 端", label: "Web / Mobile / Extension / CLI" },
       { value: "1 分钟", label: "完成一键部署" },
     ],
   },
@@ -199,6 +208,7 @@ const en: SiteTranslationDict = {
     cta: "Get Started",
   },
   content: {
+    badge: "Knowledge Capture · AI Retrieval",
     title: "More Than Bookmarks, It Is Your Personal Knowledge Base",
     paragraph1:
       "MindPocket structures your saved content with folders and tags, so your archive stays searchable over time.",
@@ -208,13 +218,34 @@ const en: SiteTranslationDict = {
       "The more I save, the easier it gets to find things. Auto summaries and tags save me a lot of cleanup time.",
     author: "Early User Feedback",
     authorRole: "Indie Developer",
+    panelTitle: "Knowledge Panel",
+    panelSubtitle:
+      "Turn saved links into a personal archive you can question, revisit, and reuse over time.",
+    highlights: [
+      {
+        title: "Auto Summaries",
+        detail: "Condense long reads while keeping the important context.",
+      },
+      {
+        title: "Tag Clustering",
+        detail: "Group themes automatically so cleanup stays lightweight.",
+      },
+      {
+        title: "Semantic Search",
+        detail: "Search saved history by intent, not just exact titles.",
+      },
+      {
+        title: "Long-Term Memory",
+        detail: "Convert scattered inputs into reusable knowledge assets.",
+      },
+    ],
   },
   stats: {
     title: "Core Product Signals",
     subtitle: "Designed for long-term personal usage: free, controllable, and extensible.",
     items: [
       { value: "100%", label: "Open Source" },
-      { value: "3 Apps", label: "Web / Mobile / Extension" },
+      { value: "4 Apps", label: "Web / Mobile / Extension / CLI" },
       { value: "1 Min", label: "One-Click Deploy" },
     ],
   },
